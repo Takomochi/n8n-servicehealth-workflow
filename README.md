@@ -69,10 +69,11 @@ This workflow is designed to monitor service health, generate alerts, and notify
 ![alt text](outputs/n8n_project_worflow_screenshot.png)
 
 ## Example Outputs
-### Slack Notification & Google Sheets Data
-1. Incident Alert Notification
-![alt text](outputs/slack-incident-alert.png)
-2. Service Health Report
-![alt text](outputs/slack-service-health-report.png)
-3 Google Sheet Data Upload 
-![alt text](outputs/google-sheet-data.png)
+**Incident Alert Notification**  
+![Incident Alert](outputs/slack-incident-alert.png)
+
+**Service Health Report**  
+![Service Health](outputs/slack-service-health-report.png)
+
+**Google Sheet Data Upload**  
+![Google Sheet](outputs/google-sheet-data.png)
