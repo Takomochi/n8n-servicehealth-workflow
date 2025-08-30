@@ -1,0 +1,525 @@
+{
+  "name": "***REDACTED***",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "61186ea6-e313-43b5-92ad-9d9674349869",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "***REDACTED***",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        -16
+      ],
+      "id": "a40f2c99-536f-4d09-a368-9c9f2bd13ce5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        208
+      ],
+      "id": "9f639a84-7df9-48c4-a728-bdf67be56c0a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ENV_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        208
+      ],
+      "id": "9113a1e9-b04a-4b05-9f61-d508ae0b96f5",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ENV_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "SLACK_CHANNEL_ID",
+          "mode": "list",
+          "cachedResultName": "service-health-report"
+        },
+        "text": "=Good morning! Here is your alert summary for today :warning:\n\n{{ $json.output }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1616,
+        -16
+      ],
+      "id": "a687646a-797d-4555-a932-f49f92691c84",
+      "name": "Send a message",
+      "webhookId": "***REDACTED***",
+      "credentials": {
+        "slackApi": {
+          "id": "ENV_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "***REDACTED***",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1168,
+        -16
+      ],
+      "id": "ed132f0f-9564-47b5-ad18-2e9a5442eb47",
+      "name": "AI Summarize",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import random\nfrom datetime import datetime, timedelta\n\n# 🔧 Number of unique services\nNUM_SERVICES = 10  \n\n# Updated statuses\nstatuses = [\"healthy\", \"medium\", \"high\", \"critical\"]\n\n# Realistic service names\nservices = [\n    \"payment-api\",\n    \"user-auth\",\n    \"transaction-processor\",\n    \"checkout-service\",\n    \"analytics-service\",\n    \"reporting-service\",\n    \"notification-service\",\n    \"email-service\",\n    \"billing-service\",\n    \"fraud-detection\"\n]\n\ndef get_random_error_rate(status):\n    \"\"\"Error rate based on status\"\"\"\n    if status == \"critical\":\n        return round(random.uniform(10, 20), 2)\n    elif status == \"high\":\n        return round(random.uniform(5, 15), 2)\n    elif status == \"medium\":\n        return round(random.uniform(2, 8), 2)\n    else:  # healthy\n        return round(random.uniform(0, 1), 2)\n\n# Generate alerts for each service\nitems = []\nfor service in services[:NUM_SERVICES]:  # Ensure only 10 services\n    status = random.choice(statuses)\n    items.append({\n        \"json\": {\n            \"service\": service,\n            \"status\": status,\n            \"priority\": status if status != \"healthy\" else \"low\",\n            \"error_rate\": get_random_error_rate(status),\n            \"timestamp\": (datetime.utcnow() - timedelta(minutes=random.randint(0, 60))).isoformat() + \"Z\"\n        }\n    })\n\n# Return mock alert data\nreturn items\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "98b31d78-3358-4faf-abd0-61cd0788660c",
+      "name": "Generate mock data"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "***REDACTED***",
+          "mode": "***REDACTED***"
+        },
+        "text": "***REDACTED***",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1552,
+        -192
+      ],
+      "id": "646591b3-5ad4-4503-9cf0-440f87224622",
+      "name": "Send a message1",
+      "webhookId": "***REDACTED***",
+      "credentials": {
+        "slackApi": {
+          "id": "ENV_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "482eebca-ee90-4dd2-b46a-1f9644e24869",
+              "leftValue": "={{ $json.priority }}",
+              "rightValue": "critical",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        -192
+      ],
+      "id": "81fbdecd-f85e-4aa0-a053-c7d4428de913",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "content": "notify critical alerts\n",
+        "height": 80,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1296,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "0ba9e714-06cd-4c9e-92e0-55c3909b8ea1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Send summary of services\n",
+        "height": 80,
+        "width": 192,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1312,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "8ece0fbd-2e9d-44a1-96e6-899b94074a6b",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "channelId": "***REDACTED***"
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        -192
+      ],
+      "id": "a934ddaa-3adc-4703-98c8-4dd1e3fa8ab7",
+      "name": "Create a channel",
+      "webhookId": "***REDACTED***",
+      "credentials": {
+        "slackApi": {
+          "id": "ENV_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -192
+      ],
+      "id": "cfc2679e-f04e-47a8-9176-b48da5974fed",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "operation": "invite",
+        "channelId": {
+          "__rl": true,
+          "value": "***REDACTED***",
+          "mode": "***REDACTED***"
+        },
+        "userIds": "={{ [\"SLACK_USER_ID\"] }}"
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1312,
+        -192
+      ],
+      "id": "59f95b29-27e9-4711-8a7c-8b5abf5a7d54",
+      "name": "Invite a user to a channel",
+      "webhookId": "***REDACTED***",
+      "credentials": {
+        "slackApi": {
+          "id": "ENV_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "***REDACTED***",
+          "mode": "***REDACTED***"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "***REDACTED***",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "***REDACTED***"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "service": "{{ $json.service }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "service",
+              "displayName": "service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "error_rate",
+              "displayName": "error_rate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        64
+      ],
+      "id": "6ab71faf-a7fc-4b01-ab13-cf028601ee72",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_SHEET_ID",
+          "name": "Google Auth"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate mock data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Summarize",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Summarize": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate mock data": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a channel": {
+      "main": [
+        [
+          {
+            "node": "Invite a user to a channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Create a channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invite a user to a channel": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "908833bb-445d-4dcb-b49d-74dd5fc14e61",
+  "id": "Dux03tBAAf2VzVJM",
+  "tags": []
+}
